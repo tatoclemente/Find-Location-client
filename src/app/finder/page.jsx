@@ -1,92 +1,98 @@
 'use client'
-
-import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
-
-import usePlacesAutocomplete, {
-  getGeocode,
-  getLatLng,
-} from 'use-places-autocomplete';
-
+import React, { useState, useRef } from "react";
 import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption
-} from "@reach/combobox";
+  Autocomplete,
+  GoogleMap,
+  Marker,
+  useLoadScript,
+} from "@react-google-maps/api";
 
-import "@reach/combobox/styles.css";
-import { useMemo, useState } from 'react';
-
-
-
-const containerStyle = {
-  width: '400px',
-  height: '400px'
-};
 
 const centerLatLng = {
   lat: -31.859856,
   lng: -62.721137
 };
 
-const Finder = () => {
-
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-
-  const [places, setPlaces] = useState([]);
-
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: apiKey,
-    libraries: ["places"]
-  })
-
-  if (!isLoaded) return <div>Loading...</div>
-  return <Map />
-}
-
+const libraries = ['places']
 
 const Map = () => {
-  const center = useMemo(() => (centerLatLng), [])
-  const [selected, setSelected] = useState(null)
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [searchLngLat, setSearchLngLat] = useState(null);
+  const autocompleteRef = useRef(null);
+  const [currentLocation, setCurrentLocation] = useState(null)
+  const [address, setAddress] = useState("");
+
+  // laod script for google map
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
+
+  if (!isLoaded) return <div>Loading....</div>;
+
+  // handle place change on search
+  const handlePlaceChanged = (event) => {
+    event.preventDefault();
+    const place = autocompleteRef.current.getPlace();
+    setSelectedPlace(place);
+
+    
+    const latitude = place.geometry.location.lat();
+    const longitude = place.geometry.location.lng();
+    console.log("Lat: ", latitude);
+    console.log("Lng: ", longitude);
+
+    if (place) {
+      setSearchLngLat({
+        lat: latitude,
+        lng: longitude,
+      });
+      console.log(searchLngLat);
+    } else {
+      setSearchLngLat(null)
+    }
+    setCurrentLocation(null);
+  };
+
+  const onMapLoad = (map) => {
+    map.setCenter(centerLatLng);
+  };
+
 
   return (
-    <>
-      <div className='places-container'>
-        <PacesAutocomplete setSelected={setSelected} />
-      </div>
-      <GoogleMap
-        zoom={10}
-        center={centerLatLng}
-        mapContainerClassName='map-container'
+    <div
+      className="map-container"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "20px",
+      }}
+    >
+      {/* search component  */}
+      <Autocomplete
+        onLoad={(autocomplete) => {
+          console.log("Autocomplete loaded:", autocomplete);
+          autocompleteRef.current = autocomplete;
+        }}
+        onPlaceChanged={handlePlaceChanged}
+        options={{ fields: ["address_components", "geometry", "name"] }}
       >
-        {selected && <Marker position={selected} />}
+        <input className="places-container" type="text" placeholder="Search for a location" />
+      </Autocomplete>
+
+      {/* map component  */}
+      <GoogleMap
+        zoom={currentLocation || selectedPlace ? 18 : 12}
+        center={currentLocation || searchLngLat || centerLatLng}
+        mapContainerClassName="map"
+        onLoad={onMapLoad}
+      >
+        {selectedPlace && <Marker position={searchLngLat} />}
       </GoogleMap>
-    </>
+    </div>
   );
-}
+};
 
-const PacesAutocomplete = ({ setSelected }) => {
-
-  const {
-    ready,
-    value,
-    setValue,
-    suggestions: { status, data },
-    clearSuggestions,
-  } = usePlacesAutocomplete()
-
-  return (
-    <Combobox>
-      <ComboboxInput 
-      value={value} 
-      onChange={e => setValue(e.target.value)} 
-      disabled={!ready}
-      className='combobox-input'
-      placeholder='Buscar lugar' />
-
-    </Combobox>
-  )
-}
-
-export default Finder
+export default Map;
