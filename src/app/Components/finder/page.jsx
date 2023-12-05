@@ -6,7 +6,10 @@ import {
   Marker,
   useLoadScript,
 } from "@react-google-maps/api";
-
+import styles from './finder.module.css'
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { Button } from "@mui/material";
+import { styled } from '@mui/material/styles';
 
 const centerLatLng = {
   lat: -31.859856,
@@ -14,7 +17,8 @@ const centerLatLng = {
 };
 
 const libraries = ['places']
-
+// const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+const apiKey = ''
 const Map = () => {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [searchLngLat, setSearchLngLat] = useState(null);
@@ -24,19 +28,19 @@ const Map = () => {
 
   // laod script for google map
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: apiKey,
     libraries,
   });
 
   if (!isLoaded) return <div>Loading....</div>;
 
   // handle place change on search
-  const handlePlaceChanged = (event) => {
-    event.preventDefault();
+  const handlePlaceChanged = () => {
+    // event.preventDefault();
     const place = autocompleteRef.current.getPlace();
     setSelectedPlace(place);
 
-    
+
     const latitude = place.geometry.location.lat();
     const longitude = place.geometry.location.lng();
     console.log("Lat: ", latitude);
@@ -57,68 +61,51 @@ const Map = () => {
   const onMapLoad = (map) => {
     map.setCenter(centerLatLng);
   };
-    // get current location
-    const handleGetLocationClick = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            console.log(latitude, longitude);
-            setSelectedPlace(null);
-            setSearchLngLat(null);
-            setCurrentLocation({ lat: latitude, lng: longitude });
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      } else {
-        console.log("Geolocation is not supported by this browser.");
-      }
-    };
 
-      // on map load
-  // const onMapLoad = (map) => {
-  //   const controlDiv = document.createElement("div");
-  //   const controlUI = document.createElement("div");
-  //   controlUI.innerHTML = "Get Location";
-  //   controlUI.style.backgroundColor = "white";
-  //   controlUI.style.color = "black";
-  //   controlUI.style.border = "2px solid #ccc";
-  //   controlUI.style.borderRadius = "3px";
-  //   controlUI.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
-  //   controlUI.style.cursor = "pointer";
-  //   controlUI.style.marginBottom = "22px";
-  //   controlUI.style.textAlign = "center";
-  //   controlUI.style.width = "100%";
-  //   controlUI.style.padding = "8px 10px";
-  //   controlUI.addEventListener("click", handleGetLocationClick);
-  //   controlDiv.appendChild(controlUI);
-
-  //   // const centerControl = new window.google.maps.ControlPosition(
-  //   //   window.google.maps.ControlPosition.TOP_CENTER,
-  //   //   0,
-  //   //   10
-  //   // );
-
-  //   map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(
-  //     controlDiv
-  //   );
-  // };
+  // get current location
+  const handleGetLocationClick = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log(latitude, longitude);
+          setSelectedPlace(null);
+          setSearchLngLat(null);
+          setCurrentLocation({ lat: latitude, lng: longitude });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  };
 
 
-  
   const onDragEnd = (event) => {
     const { lat, lng } = event.latLng;
     setSearchLngLat({ lat, lng });
-    
-      console.log(searchLngLat.lat(), searchLngLat.lng());
+
+    console.log(searchLngLat.lat(), searchLngLat.lng());
   }
+
+  const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
 
 
   return (
     <div
-      className="map-container"
+      className={styles.mapContainer}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -127,41 +114,53 @@ const Map = () => {
         gap: "20px",
       }}
     >
-      {/* search component  */}
-      <Autocomplete
-        onLoad={(autocomplete) => {
-          console.log("Autocomplete loaded:", autocomplete);
-          autocompleteRef.current = autocomplete;
-        }}
-        onPlaceChanged={handlePlaceChanged}
-        options={{ fields: ["address_components", "geometry", "name"] }}
-      >
-        <input className="places-container" type="text" placeholder="Search for a location" />
-      </Autocomplete>
-      <button className="button-location" onClick={handleGetLocationClick}>Get Current Location</button>
+      <div className={styles.searchContainer}>
+        {/* search component  */}
+        <Autocomplete
+          onLoad={(autocomplete) => {
+            console.log("Autocomplete loaded:", autocomplete);
+            autocompleteRef.current = autocomplete;
+          }}
+          onPlaceChanged={handlePlaceChanged}
+          options={{ fields: ["address_components", "geometry", "name"] }}
+        >
+          <input className={styles.placesContainer} type="text" placeholder="Busca una dirección..." />
+        </Autocomplete>
+        <Button 
+          // className={styles.buttonLocation} 
+          component="label" 
+          variant="contained" 
+          startIcon={<LocationOnIcon />}
+          onClick={handleGetLocationClick}>
+          Obtega su ubicación
+          <VisuallyHiddenInput type="file" />
+        </Button>
+        {/* <button className={styles.buttonLocation} onClick={handleGetLocationClick}>Obtega su ubicación<LocationOnIcon sx={{ color: '#f09999', fontSize: '1.7rem' }} /></button> */}
+      </div>
 
       {/* map component  */}
       <GoogleMap
         zoom={currentLocation || selectedPlace ? 18 : 12}
         center={currentLocation || searchLngLat || centerLatLng}
-        mapContainerClassName="map"
+        mapContainerClassName={styles.map}
         onLoad={onMapLoad}
       >
         {selectedPlace && <Marker position={searchLngLat} />}
-        {currentLocation && 
-          <Marker 
-            draggable={true} 
+        {currentLocation &&
+          <Marker
+            draggable={true}
             position={currentLocation}
             onDragEnd={onDragEnd}
-            // onDragend={(event) => {
-            //   const { lat, lng } = event.latLng;
-          
-            //   // Actualiza la ubicación
-            //   console.log('hola');
-            //   setSearchLngLat({ lat, lng });
-            // }} 
-            />}
+          // onDragend={(event) => {
+          //   const { lat, lng } = event.latLng;
+
+          //   // Actualiza la ubicación
+          //   console.log('hola');
+          //   setSearchLngLat({ lat, lng });
+          // }} 
+          />}
       </GoogleMap>
+      <button className={styles.buttonConfirm}>Confirmar ubicación</button>
     </div>
   );
 };

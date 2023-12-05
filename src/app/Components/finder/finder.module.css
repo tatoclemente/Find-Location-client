@@ -1,0 +1,113 @@
+.mapContainer {
+    width: 95%;
+    height: 100%;
+    max-width: 1080px;
+    position: relative;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    padding: 2rem 0;
+  }
+  .searchContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .placesContainer {
+    height: 2rem;
+    width: 300px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    padding: 0 10px 0 10px;
+  }
+  
+  
+  .buttonLocation {
+    /* padding: 7px 20px; */
+    /* box-shadow: 0 2px 6px rgba(0,0,0,.3); */
+    /* background-color: rgb(75, 93, 207); */
+    /* color: #fff; */
+    /* cursor: pointer; */
+    /* border: none; */
+    /* border-radius: 5px; */
+    /* transition: .3s ease-in-out; */
+    /* letter-spacing: .5px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* gap: .5rem; */
+  }
+  .buttonLocation:hover {
+    /* transform: scale(1.1); */
+  }
+
+  .iconLocation {
+    color: rgb(248, 169, 169);
+  }
+  
+  .map{
+    border-radius: 20px;
+    box-shadow: 5px 10px 45px rgba(0,0,0,.3);
+    width: 100%;
+    height: 450px;
+    /* margin: auto */
+  }
+
+  .buttonConfirm {
+    padding: 7px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.3);
+    background-color: rgb(75, 93, 207);
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: .3s ease-in-out;
+    letter-spacing: .5px;
+    font-size: 1rem;
+    height: 2.5rem;
+  }
+
+  .buttonConfirm:hover {
+    transform: scale(1.1);
+  }
+  
+  @media (min-width: 577px) {
+    .searchContainer {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+  }
+
+  @media (min-width: 976px) {
+    .searchContainer {
+        position: absolute;
+        top: 43px;
+        right: 15%;
+        z-index: 200;
+        gap: 2rem;
+    }
+    .placesContainer {
+        height: 2.5rem;
+        width: 350px;
+        border-radius: 5px;
+        border: 1px solid gray;
+        padding: 0 10px 0 10px;
+      }
+    .placesContainer::placeholder {
+        font-size: 1.2em;
+      }
+        
+    .buttonLocation {
+        font-size: 1rem;    
+    }
+    .map{
+        border-radius: 20px;
+        box-shadow: 5px 10px 45px rgba(0,0,0,.3);
+        width: 90%;
+        height: 500px;
+        /* margin: auto */
+      }
+      
+  }
+
