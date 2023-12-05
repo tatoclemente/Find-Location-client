@@ -17,14 +17,23 @@ const centerLatLng = {
 };
 
 const libraries = ['places']
-// const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-const apiKey = ''
+const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+// const apiKey = ''
 const Map = () => {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [searchLngLat, setSearchLngLat] = useState(null);
   const autocompleteRef = useRef(null);
   const [currentLocation, setCurrentLocation] = useState(null)
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState({
+    street: '',
+    city: '',
+    province: '',
+    country: '',
+  });
+  const [location, setLocation] = useState({
+    lat: 0,
+    lng: 0,
+  })
 
   // laod script for google map
   const { isLoaded } = useLoadScript({
@@ -62,6 +71,27 @@ const Map = () => {
     map.setCenter(centerLatLng);
   };
 
+  const getAddress = async (lat, lng) => {
+
+    console.log(lat, lng);
+
+    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`)
+      const data = await response.json()
+      const address = data.results[0].formatted_address
+      const addressArr = address.split(',')
+      setAddress({
+        street: addressArr[0],
+        city: addressArr[1].trim(),
+        province: addressArr[2].trim(),
+        country: addressArr[3].trim(),
+      })
+      setLocation({
+        lat,
+        lng,
+      })
+  }
+
+
   // get current location
   const handleGetLocationClick = () => {
     if (navigator.geolocation) {
@@ -83,12 +113,19 @@ const Map = () => {
   };
 
 
+
+
   const onDragEnd = (event) => {
     const { lat, lng } = event.latLng;
     setSearchLngLat({ lat, lng });
 
-    console.log(searchLngLat.lat(), searchLngLat.lng());
+    getAddress(lat(), lng());
+    // console.log(searchLngLat.lat(), searchLngLat.lng());
   }
+
+  
+  console.log(address);
+  console.log(location);
 
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -98,7 +135,7 @@ const Map = () => {
     position: 'absolute',
     bottom: 0,
     left: 0,
-    whiteSpace: 'nowrap',
+      whiteSpace: 'nowrap',
     width: 1,
   });
 
@@ -133,7 +170,7 @@ const Map = () => {
           startIcon={<LocationOnIcon />}
           onClick={handleGetLocationClick}>
           Obtega su ubicación
-          <VisuallyHiddenInput type="file" />
+          <VisuallyHiddenInput />
         </Button>
         {/* <button className={styles.buttonLocation} onClick={handleGetLocationClick}>Obtega su ubicación<LocationOnIcon sx={{ color: '#f09999', fontSize: '1.7rem' }} /></button> */}
       </div>
