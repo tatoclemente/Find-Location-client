@@ -120,6 +120,19 @@ a {
   height: 100%;
 }
 
+.button-location {
+  padding: 6px 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  transition: .3s ease-in-out;
+}
+.button-location:hover {
+  background-color: rgb(75, 93, 207);
+  color: #fff;
+}
+
 .map{
   border-radius: 20px;
   box-shadow: 5px 10px 45px rgba(0,0,0,.3);

@@ -57,6 +57,63 @@ const Map = () => {
   const onMapLoad = (map) => {
     map.setCenter(centerLatLng);
   };
+    // get current location
+    const handleGetLocationClick = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            console.log(latitude, longitude);
+            setSelectedPlace(null);
+            setSearchLngLat(null);
+            setCurrentLocation({ lat: latitude, lng: longitude });
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      } else {
+        console.log("Geolocation is not supported by this browser.");
+      }
+    };
+
+      // on map load
+  // const onMapLoad = (map) => {
+  //   const controlDiv = document.createElement("div");
+  //   const controlUI = document.createElement("div");
+  //   controlUI.innerHTML = "Get Location";
+  //   controlUI.style.backgroundColor = "white";
+  //   controlUI.style.color = "black";
+  //   controlUI.style.border = "2px solid #ccc";
+  //   controlUI.style.borderRadius = "3px";
+  //   controlUI.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+  //   controlUI.style.cursor = "pointer";
+  //   controlUI.style.marginBottom = "22px";
+  //   controlUI.style.textAlign = "center";
+  //   controlUI.style.width = "100%";
+  //   controlUI.style.padding = "8px 10px";
+  //   controlUI.addEventListener("click", handleGetLocationClick);
+  //   controlDiv.appendChild(controlUI);
+
+  //   // const centerControl = new window.google.maps.ControlPosition(
+  //   //   window.google.maps.ControlPosition.TOP_CENTER,
+  //   //   0,
+  //   //   10
+  //   // );
+
+  //   map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(
+  //     controlDiv
+  //   );
+  // };
+
+
+  
+  const onDragEnd = (event) => {
+    const { lat, lng } = event.latLng;
+    setSearchLngLat({ lat, lng });
+    
+      console.log(searchLngLat.lat(), searchLngLat.lng());
+  }
 
 
   return (
@@ -81,6 +138,7 @@ const Map = () => {
       >
         <input className="places-container" type="text" placeholder="Search for a location" />
       </Autocomplete>
+      <button className="button-location" onClick={handleGetLocationClick}>Get Current Location</button>
 
       {/* map component  */}
       <GoogleMap
@@ -90,6 +148,19 @@ const Map = () => {
         onLoad={onMapLoad}
       >
         {selectedPlace && <Marker position={searchLngLat} />}
+        {currentLocation && 
+          <Marker 
+            draggable={true} 
+            position={currentLocation}
+            onDragEnd={onDragEnd}
+            // onDragend={(event) => {
+            //   const { lat, lng } = event.latLng;
+          
+            //   // Actualiza la ubicación
+            //   console.log('hola');
+            //   setSearchLngLat({ lat, lng });
+            // }} 
+            />}
       </GoogleMap>
     </div>
   );
