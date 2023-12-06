@@ -1,11 +1,11 @@
 import styles from './page.module.css'
-import Map from './Components/finder/page'
+import HomePage from '../app/home/page'
 
 export default function Home() {
 
   return (
-    <main className={styles.main}>
-      <Map />
-    </main>
+    <div className={styles.main}>
+      <HomePage />
+    </div>
   )
 }

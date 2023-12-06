@@ -1,0 +1,31 @@
+.navContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    width: 100%;
+    height: 70px;
+    background-color: #008588
+}
+
+.leftContainer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.appName {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding-bottom: .4rem;
+    display: none;
+}
+
+.rightContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    color: #fff;
+}
