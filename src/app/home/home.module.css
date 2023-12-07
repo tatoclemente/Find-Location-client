@@ -65,7 +65,7 @@
   height: 60px;
   width: 60px;
 }
-.rigthContainer {
+.rightContainer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,9 +99,20 @@
   /* max-width: 600px; */
 }
 
+.spanSend {
+  margin-right: 1rem;
+}
+
+.spanFriends {
+  margin-right: .9rem;
+}
+
+.spanFavorites {
+  transform: translateX(-.5rem);
+}
 .spanExplore {
-  margin-right: 3.3rem;
-  transform: translateX(2rem);
+  margin-right: 4.4rem;
+  transform: translateX(1.7rem);
 }
 .map {
   border-radius: 20px;
@@ -109,4 +120,33 @@
   width: 90%;
   height: 350px;
   margin-bottom: 2rem;
+}
+
+@media (min-width: 437px) {
+  .buttonsContainer {
+    max-width: 350px;
+  }
+}
+
+@media (min-width: 976px) {
+  .mainContainer {
+    flex-direction: row;
+    align-items: center;
+  }
+  .leftContainer {
+    width: 50%;
+    transform: translateY(-2rem);
+  }
+  .rightContainer {
+    width: 50%;
+  }
+  .map {
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  .map{
+    height: 450px;
+  }
 }

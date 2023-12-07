@@ -1,0 +1,51 @@
+.titleContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-right: 2.5rem;
+  }
+  .title {
+    margin-top: 2rem;
+    font-size: 3rem;
+    color: #0f4795;
+    animation: typewrite 2s linear;
+  }
+  
+  @keyframes typewrite {
+    0% {
+      opacity: 0;
+    }
+    25% {
+      opacity: 1;
+    }
+    75% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  .logoContainer {
+    position: relative;
+    height: 65px;
+    transform: translateY(10px);
+  }
+  
+  .topLogo {
+    position: absolute;
+    top: 0;
+    left: -2.5px;
+    animation: typewrite 2s infinite;
+    height: 65px;
+    width: 65px;
+    z-index: 2;
+  }
+  .baseLogo {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 60px;
+    width: 60px;
+  }

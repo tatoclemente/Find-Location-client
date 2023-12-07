@@ -7,12 +7,12 @@ const NavBar = () => {
     <nav className={styles.navContainer}>
       <div className={styles.leftContainer}>
         <Image width={50} height={50} src="/images/location-icon.png" alt='profile-img' />
-        <p className={styles.appName}>Location App</p>
+        <p className={styles.appName}>Locatapp</p>
       </div>
-        <div className={styles.rightContainer}>
-          <p>¡Hi, Gustavo!</p>
-          <Avatar alt="Remy Sharp" src="/images/perrito.png" />
-        </div>
+      <div className={styles.rightContainer}>
+        <p>¡Hi, Gustavo!</p>
+        <Avatar alt="Remy Sharp" src="/images/perrito.png" />
+      </div>
     </nav>
   )
 }

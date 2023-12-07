@@ -29,3 +29,9 @@
     gap: 1rem;
     color: #fff;
 }
+
+@media (min-width: 976px) {
+    .appName {
+        display: block;
+    }
+}
