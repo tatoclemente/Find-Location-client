@@ -6,7 +6,7 @@ import {
   Marker,
   useLoadScript,
 } from "@react-google-maps/api";
-import styles from './finder.module.css'
+import styles from './Map.module.css'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Button } from "@mui/material";
 import { styled } from '@mui/material/styles';

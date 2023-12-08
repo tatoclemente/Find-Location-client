@@ -5,6 +5,7 @@ import styles from './Form.module.css'
 import { Button, Input, OutlinedInput, TextField } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 const theme = createTheme({
   palette: {
@@ -16,6 +17,7 @@ const theme = createTheme({
     },
   },
 });
+
 
 const LoginForm = ({ setIsRegistered }) => {
   return (
@@ -36,13 +38,15 @@ const LoginForm = ({ setIsRegistered }) => {
               variant="standard"
               color='green'
               type='password' />
-            <Button
-              style={{ marginTop: '1rem' }}
-              variant='contained'
-              color='green'
-            >
-              Ingresar
-            </Button>
+            <Link href="/home">
+              <Button
+                style={{ marginTop: '1rem' }}
+                variant='contained'
+                color='green'
+              >
+                Ingresar
+              </Button>
+            </Link>
           </div>
         </ThemeProvider>
       </form>
