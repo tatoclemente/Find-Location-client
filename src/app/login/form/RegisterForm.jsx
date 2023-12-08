@@ -56,7 +56,7 @@ const RegisterForm = ({ setIsRegistered }) => {
       <div className={styles.loginFooter}>
         <p>¿Ya tienes cuenta?
           <span
-            style={{ color: '#008588', textDecoration: 'underline', cursor: 'pointer' }}
+            style={{ color: '#008588', textDecoration: 'underline', cursor: 'pointer', marginLeft: '0.5rem' }}
             onClick={() => setIsRegistered(true)}
           >
             Ingresa aquí

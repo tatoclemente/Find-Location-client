@@ -49,7 +49,7 @@ const LoginForm = ({ setIsRegistered }) => {
       <div className={styles.loginFooter}>
         <p>¿Aun no tiens cuenta?
           <span
-            style={{ color: '#008588', textDecoration: 'underline', cursor: 'pointer' }}
+            style={{ color: '#008588', textDecoration: 'underline', cursor: 'pointer', marginLeft: '0.5rem' }}
             onClick={() => setIsRegistered(false)}
           >
             Registrate
