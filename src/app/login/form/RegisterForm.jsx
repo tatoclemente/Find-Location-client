@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './Form.module.css'
 // import OutlinedInput from '@mui/material/OutlinedInput';
 // or
-import { Button, Input, OutlinedInput, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Link from 'next/link';
 
@@ -17,7 +17,7 @@ const theme = createTheme({
   },
 });
 
-const LoginForm = ({ setIsRegistered }) => {
+const RegisterForm = ({ setIsRegistered }) => {
   return (
     <>
       <form className={styles.loginForm}>
@@ -36,28 +36,35 @@ const LoginForm = ({ setIsRegistered }) => {
               variant="standard"
               color='green'
               type='password' />
+            <TextField
+              className={styles.input}
+              id="standard-basic"
+              label="Repetir contaseña"
+              variant="standard"
+              color='green'
+              type='password' />
             <Button
               style={{ marginTop: '1rem' }}
               variant='contained'
               color='green'
             >
-              Ingresar
+              Registrarse
             </Button>
           </div>
         </ThemeProvider>
       </form>
       <div className={styles.loginFooter}>
-        <p>¿Aun no tiens cuenta?
+        <p>¿Ya tienes cuenta?
           <span
             style={{ color: '#008588', textDecoration: 'underline', cursor: 'pointer' }}
-            onClick={() => setIsRegistered(false)}
+            onClick={() => setIsRegistered(true)}
           >
-            Registrate
-          </span></p>
-        <p><Link style={{ color: '#008588', textDecoration: 'underline' }} href="">Restablecer contraseña</Link></p>
+            Ingresa aquí
+          </span>
+        </p>
       </div>
     </>
   )
 }
 
-export default LoginForm
+export default RegisterForm

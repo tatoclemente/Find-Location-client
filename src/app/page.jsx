@@ -1,11 +1,11 @@
 import styles from './page.module.css'
-import HomePage from '../app/home/page'
+import Login from './login/page'
 
 export default function Home() {
 
   return (
     <div className={styles.main}>
-      <HomePage />
+      <Login />
     </div>
   )
 }

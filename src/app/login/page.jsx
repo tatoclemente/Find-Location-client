@@ -2,9 +2,11 @@
 import React, { useEffect, useState } from 'react'
 import styles from './Login.module.css'
 import LoginForm from './form/LoginForm'
+import RegisterForm from './form/RegisterForm'
 
 const Login = () => {
   const [videoRef, setVideoRef] = useState(null);
+  const [isRegistered, setIsRegistered] = useState(true)
 
   useEffect(() => {
     // Obtiene el elemento <video>
@@ -30,7 +32,16 @@ const Login = () => {
         {/* <img  className={styles.loginImg} src="/images/ph-login.png" alt="ph-image" /> */}
       </div>
       <div className={styles.rightContainer}>
-        <LoginForm />
+        <div className={styles.titleContainer}>
+          <h1 className={styles.title}>Locatapp</h1>
+          <div className={styles.logoContainer}>
+            <img className={styles.topLogo} src="/images/top-logo.png" alt="top-logo" />
+            <img className={styles.baseLogo} src="/images/base-logo.png" alt="" />
+          </div>
+        </div>
+        {isRegistered 
+          ? <LoginForm isRegistered={isRegistered} setIsRegistered={setIsRegistered} /> 
+          : <RegisterForm isRegistered={isRegistered} setIsRegistered={setIsRegistered} />}
       </div>
     </div>
   )
