@@ -14,8 +14,8 @@ const io = new Server(httpServer, {
 io.on('connection', async (socket) => {
     console.log('New user connected', socket.id);
 
-    socket.on('sendMessage', (arg1, arg2, callback) => {
-        // console.log(data);
+    socket.on('enviarMensaje', (data, callback) => {
+        console.log(data);
         // socket.emit('responseEvent', 'Hello Client')
         callback({
             status: 'OK'
