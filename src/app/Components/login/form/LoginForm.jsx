@@ -1,7 +1,5 @@
-'use client'
 
-import React, { useState } from 'react'
-import { useEffect, useContex, useCookies } from 'next/router'
+
 import styles from './Form.module.css'
 import axios from 'axios'
 // import OutlinedInput from '@mui/material/OutlinedInput';
@@ -9,8 +7,9 @@ import axios from 'axios'
 import { Button, Input, OutlinedInput, TextField } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
-import next from 'next'
+import { useRouter } from 'next/navigation'
+
+import { useForm } from '@/hooks/useForm';
 
 const theme = createTheme({
   palette: {
@@ -26,24 +25,22 @@ const theme = createTheme({
 
 const LoginForm = ({ setIsRegistered }) => {
 
-  const [login, setLogin] = useState({
-    email: '',
-    password: ''
-  })
+  const router = useRouter()
 
-  const handleChange = (event) => {
-    const { name, value } = event.target
-    setLogin({
-      ...login,
-      [name]: value
-    })
-  }
+  const { login, handleChange } = useForm()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const { data } = await axios.post('http://localhost:3001/login', login)
-    console.log(data);
+    try {
+      const { data } = await axios.post('http://localhost:3001/login', login)
+      console.log(data);
+      data.message && router.push('/tutorial')
+    } catch (error) {
+      console.error(error.response.data.error);
+    }
   }
+
+  
 
   return (
     <>
@@ -53,20 +50,23 @@ const LoginForm = ({ setIsRegistered }) => {
             <TextField
               onChange={handleChange}
               className={styles.input}
-              id="standard-basic"
+              id="email"
               label="Email"
               variant="standard"
               color='green'
+              type='email'
+              autoComplete="current-email"
               name='email'
               value={login.email} />
             <TextField
               onChange={handleChange}
               className={styles.input}
-              id="standard-basic"
+              id="password"
               label="Contaseña"
               variant="standard"
               color='green'
               type='password'
+              autoComplete="current-password"
               name='password'
               value={login.password} />
               <Button

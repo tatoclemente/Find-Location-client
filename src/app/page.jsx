@@ -1,11 +1,13 @@
-import styles from './page.module.css'
-import Login from './login/page'
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation'
 
 export default function Home() {
 
+  const cookieStore = cookies()
+  const token = cookieStore.get('auth-token')
+  console.log(token);
+
   return (
-    <div className={styles.main}>
-      <Login />
-    </div>
+    redirect('/login')
   )
 }
