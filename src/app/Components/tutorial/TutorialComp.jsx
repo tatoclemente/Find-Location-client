@@ -8,6 +8,10 @@ import axios from 'axios'
 export const TutorialComp = (props) => {
 
     const [users, setUsers] = useState([])
+    const [socket, setSocket] = useState(undefined)
+    const [message, setMessage] = useState("")
+    const [roomName, setRoomName] = useState("")
+    const [messages, setMessages] = useState([])
 
     useEffect(() => {
         const getUsers = async () => {
@@ -34,49 +38,53 @@ export const TutorialComp = (props) => {
     }
 
     const handleUserSelect = (id) => {
-        console.log(id);
         setEnviarMensaje({
             ...enviarMensaje,
             userId: id
         })
     }
 
-    const socket = io("http://localhost:3001")
-
-    useEffect(() => {
-        socket.on('connect', () => {
-            console.log('connected to server ID: ', socket.id)
-
-        })
-
-        socket.on('disconnect', () => {
-            console.log('Desconectado del servidor ', socket.connected)
-        })
-
-
-        // Escuchar informacion
-        socket.on('enviarMensajeServidor', (mensaje) => {
-            console.log('Servidor: ', mensaje);
-        })
-
-    }, [])
-
-    const sendSocketEvent = () => {
-        if (enviarMensaje.userId) {
+    
+    
+    const sendSocketEvent = (e) => {
+        e.preventDefault()
+        socket.emit('message', message, roomName)
+        // if (enviarMensaje.userId) {
             
-        
-        socket.emit('enviarMensajeCliente', {
-            usuario: enviarMensaje.nombre,
-            mensaje: enviarMensaje.mensaje,
-            userId: enviarMensaje.userId
-        }, (resp) => {
-            console.log('Respuest adel servidor', resp);
-        })
-     } 
+            
+        //     socket.emit('message', {
+        //         user: enviarMensaje.nombre,
+        //         message: enviarMensaje.mensaje,
+        //         // userId: enviarMensaje.userId
+        //     }, (resp) => {
+        //         console.log('Respuest del servidor', resp);
+        //     })
+        // } 
     }
+    
+        useEffect(() => {
+            // socket.on('connect', () => {
+            //     console.log('connected to server ID: ', socket.id)
+    
+            // })
+    
+            // socket.on('disconnect', () => {
+            //     console.log('Desconectado del servidor ', socket.connected)
+            // })
+    
+            const socket = io("http://localhost:3001")
+            // Escuchar informacion
+            socket.on('message', message => {
+                setMessages((messages)=>[...messages, message])
+                console.log('Servidor: ', message);
+            })
+            
+            setSocket(socket)
+        }, [])
+        
 
 
-    console.log(users);
+    // console.log(messages);
     
     return (
         <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -92,18 +100,24 @@ export const TutorialComp = (props) => {
                 <input
                     type="text"
                     name="nombre"
-                    value={enviarMensaje.nombre}
-                    onChange={handleChange}
+                    onChange={(e) => setRoomName(e.target.value)}
                 />
                 <label htmlFor="">Mensaje</label>
                 <textarea 
-                    value={enviarMensaje.mensaje}
                     name="mensaje"
-                    onChange={handleChange}
+                    onChange={(e) => setMessage(e.target.value)}
                 />
                 <button style={{ width: '100px', height: 'auto', margin: '30px' }} onClick={sendSocketEvent}>
                     Send Message
                 </button>
+
+            <ul>
+                {
+                    messages.map((message, i) => (
+                        <li key={i}>{message}</li>
+                    ))
+                }
+            </ul>
             </form>
         </div>
     )

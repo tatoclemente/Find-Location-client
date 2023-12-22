@@ -33,10 +33,10 @@ const LoginForm = ({ setIsRegistered }) => {
     e.preventDefault()
     try {
       const { data } = await axios.post('http://localhost:3001/login', login)
-      console.log(data);
       data.message && router.push('/tutorial')
     } catch (error) {
       console.error(error.response.data.error);
+      alert(error.response.data.error)
     }
   }
 
